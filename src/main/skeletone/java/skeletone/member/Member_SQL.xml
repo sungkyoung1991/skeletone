@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="skeletone.MemberMapper">
+    
+	<select id="getUserInfo" parameterType="memberVO" resultType="memberVO" >		
+		select 
+			id, name, email  
+		from mbr_info 
+		where email = #{email} and passwd = password(#{passwd})	 
+	</select>
+	
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="skeletone.attach.attachedFileMapper">
+	<resultMap id="attachedFile" type="skeletone.attach.AttachedFileVO">
+		<result property="fileNo"			column="FILE_NO"			/>
+		<result property="phsicalDir"		column="PHSICAL_DIR"		/>
+		<result property="serverSubPath"	column="SERVER_SUB_PATH"		/>
+		<result property="viewFileName"		column="VIEW_FILENAME"		/>
+		<result property="phsicalFileName"	column="PHSICAL_FILENAME"	/>
+		<result property="useYn"			column="USE_YN"				/>
+		<result property="isMain"			column="ISMAIN"				/>
+	</resultMap>
+	
+	<insert id="insertAttachedFile" parameterType="skeletone.attach.AttachedFileVO">
+		<![CDATA[
+			INSERT INTO T_ATTACH_FILE ( FILE_NO, PHSICAL_DIR, SERVER_SUB_PATH, VIEW_FILENAME, PHSICAL_FILENAME, USE_YN)
+			VALUES (NULL, #{phsicalDir}, #{serverSubPath}, #{viewFileName}, #{phsicalFileName}, 'Y')
+		]]>
+		<selectKey keyProperty="fileNo" resultType="_int" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
+	</insert>
+	
+	<select id="getAttachedFile" parameterType="skeletone.attach.AttachedFileVO" resultMap="attachedFile">
+		<![CDATA[
+			SELECT 
+				* 
+			FROM T_ATTACH_FILE 
+			WHERE FILE_NO = #{searchFileNo}
+		]]>
+	</select>
+	
+	<!-- 현재 mysql 버전에 맞게 수정 미완료임. -->
+	<!-- <update id="updateAttachedFile">
+		<![CDATA[
+			UPDATE T_ATTACH_FILE
+			SET PHSICAL_DIR = #{phsicalDir}
+				, VIEW_FILENAME = #{viewFileName}                                                                                                        
+				, PHSICAL_FILENAME = #{phsicalFileName}
+				, ISMAIN = #{isMain}
+			WHERE FILE_ID = #{fileId}
+		]]>
+	</update>
+
+	<update id="saveAttachedFile">
+		<![CDATA[
+			MERGE INTO T_ATTACH_FILE A
+			USING DUAL
+			ON (A.FILE_ID=#fileId#)
+			WHEN MATCHED THEN
+				UPDATE SET
+					A.PHSICAL_DIR		= #{phsicalDir},
+					A.VIEW_FILENAME		= #{viewFileName},
+					A.PHSICAL_FILENAME	= #{phsicalFileName},
+					A.USE_YN			= #{useYn},
+					A.ISMAIN			= #{isMain}
+			WHEN NOT MATCHED THEN
+				INSERT ( A.FILE_ID, A.PHSICAL_DIR, A.VIEW_FILENAME, A.PHSICAL_FILENAME, A.USE_YN, A.ISMAIN )
+				VALUES ( #{fileId}, #{phsicalDir}, #{viewFileName}, #{phsicalFileName}, #{useYn}, #{isMain} )
+          ]]>
+    </update>
+
+	<update id="deleteAttachedFile">
+		<![CDATA[
+			UPDATE T_ATTACH_FILE
+			SET USE_YN = 'N'
+			WHERE FILE_ID = #{fileId}
+		]]>
+	</update>
+
+	<select id="getAttachedFile" resultMap="attachedFile">
+		SELECT NVL(FILE_ID,0) FILE_ID, NVL(PHSICAL_DIR,'') PHSICAL_DIR, NVL(VIEW_FILENAME,'') VIEW_FILENAME, NVL(PHSICAL_FILENAME,'') PHSICAL_FILENAME, NVL(USE_YN,'') USE_YN
+		FROM T_ATTACH_FILE
+		<if test='searchFileId!=null and searchFileId!=""'>
+			WHERE FILE_ID IN (${searchFileId})
+		</if>
+		ORDER BY FILE_ID ASC
+	</select>
+
+	<select id="getAttachedFileList" resultMap="attachedFile">
+		SELECT NVL(FILE_ID,0) FILE_ID, NVL(PHSICAL_DIR,'') PHSICAL_DIR, NVL(VIEW_FILENAME,'') VIEW_FILENAME, NVL(PHSICAL_FILENAME,'') PHSICAL_FILENAME, NVL(USE_YN,'') USE_YN, NVL(ISMAIN,'') ISMAIN
+		FROM T_ATTACH_FILE
+		<if test='searchFileId!=null and searchFileId!=""'>
+			WHERE FILE_ID IN (${searchFileId})
+		</if>
+		ORDER BY FILE_ID ASC
+	</select> -->
+
+</mapper>
