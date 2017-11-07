@@ -1,8 +1,5 @@
 package skeletone.interceptor;
 
-import java.io.PrintWriter;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,23 +15,12 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession(false);
-		if(session == null){
-			System.out.println("###### 세션정보존재하지않음");
-			//request.getRequestDispatcher(request.getContextPath()+"/skeletone/alert/notLoginAlert/").forward(request, response);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/alert/notLoginAlert.jsp");
-			dispatcher.include(request, response);
-			return false;
-		}
-		
 		MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");
-		if(memberVO == null){
-			System.out.println("###### memberVO 정보존재하지않음");
-			//request.getRequestDispatcher(request.getContextPath()+"/skeletone/alert/notLoginAlert/").forward(request, response);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/alert/notLoginAlert.jsp");
-			dispatcher.include(request, response);			
+		if(session == null || memberVO == null){
+			System.out.println("###### 세션 로그인정보존재하지않음");
+			response.sendRedirect("/skeletone/alert/notLoginAlert/");
 			return false;
 		}
- 		
 		return true;
 	}
 	
