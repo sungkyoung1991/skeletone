@@ -1,5 +1,6 @@
 package skeletone.interceptor;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,7 +19,10 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		MemberVO memberVO = (MemberVO) session.getAttribute("memberVO");
 		if(session == null || memberVO == null){
 			System.out.println("###### 세션 로그인정보존재하지않음");
-			response.sendRedirect("/skeletone/alert/notLoginAlert/");
+			//response.sendRedirect("/skeletone/alert/notLoginAlert/");
+			RequestDispatcher rd = request.getRequestDispatcher("/skeletone/alert/notLoginAlert/");
+            //rd.forward(request, response); // stream closed 에러발생		//https://m.blog.naver.com/PostView.nhn?blogId=skypoly3777&logNo=220761762249&proxyReferer=https%3A%2F%2Fwww.google.co.kr%2F
+			rd.include(request, response);
 			return false;
 		}
 		return true;
